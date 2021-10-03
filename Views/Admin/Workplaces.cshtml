@@ -1,0 +1,62 @@
+﻿@model HotDesk.ViewModels.WorkplacesViewModel
+@{
+    ViewData["Title"] = "Workplaces";
+}
+
+<body class="admin-page">
+    <div class="status">
+        Вы авторизованы под логином @User.Identity.Name
+    </div>
+    <ul class="navigation">
+        <li><a asp-action="Workplaces" asp-controller="Admin">Менеджер рабочих мест</a></li>
+        <li><a asp-action="Devices" asp-controller="Admin">Менеджер устройств</a></li>
+        <li><a asp-action="Reservations" asp-controller="Admin">Менеджер бронирований</a></li>
+        <li class="anchor-right"><a asp-action="Logout" asp-controller="Account">Выйти</a></li>
+    </ul>
+    <h1 class="table-header">Рабочие места</h1>
+    <div class="popup-form" id="addWorkplaceForm">
+        <form class="form-container" asp-action="Workplaces" asp-controller="Admin" method="post">
+            <h2>Новое рабочее место</h2>
+            <label asp-for="Description">Описание рабочего места</label>
+            <input type="text" asp-for="Description" placeholder="Введите описание рабочего места" />
+            <span asp-validation-for="Description" class="validation-message"></span>
+
+            <label asp-for="HasDesktop">Наличие ПК</label>
+            <select asp-for="HasDesktop">
+                <option value="true">Да</option>
+                <option value="false">Нет</option>
+            </select>
+
+            <button type="submit" class="confirm-btn">Добавить</button>
+            <button type="button" class="cancel-btn" onclick="closeForm('addWorkplaceForm')">Закрыть</button>
+        </form>
+    </div>
+    <main>
+        <form asp-action="Workplaces" asp-controller="Admin" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Номер рабочего места</th>
+                        <th>Описание рабочего места</th>
+                        <th>Наличие ПК</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var workplace in Model.Workplaces)
+                    {
+                        <tr>
+                            <td>@workplace.Id</td>
+                            <td>@workplace.Description</td>
+                            <td>@workplace.HasDesktop</td>
+                            <td>
+                                <button class="btn-danger" type="submit" name="workplaceId" value="@workplace.Id">Удалить</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </main>
+    <button class="open-button" onclick="openForm('addWorkplaceForm')">Добавить рабочее место</button>
+</body>

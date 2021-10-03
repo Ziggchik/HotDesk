@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<body class="admin-page">
+    <div class="status">
+        Вы авторизованы под логином @User.Identity.Name
+    </div>
+    <ul class="navigation">
+        <li><a asp-action="Workplaces" asp-controller="Admin">Менеджер рабочих мест</a></li>
+        <li><a asp-action="Devices" asp-controller="Admin">Менеджер устройств</a></li>
+        <li><a asp-action="Reservations" asp-controller="Admin">Менеджер бронирований</a></li>
+        <li class="anchor-right"><a asp-action="Logout" asp-controller="Account">Выйти</a></li>
+    </ul>
+</body>

@@ -1,0 +1,51 @@
+﻿@model HotDesk.ViewModels.DevicesViewModel
+@{
+    ViewData["Title"] = "Devices";
+}
+
+<body class="admin-page">
+    <div class="status">
+        Вы авторизованы под логином @User.Identity.Name
+    </div>
+    <ul class="navigation">
+        <li><a asp-action="Workplaces" asp-controller="Admin">Менеджер рабочих мест</a></li>
+        <li><a asp-action="Devices" asp-controller="Admin">Менеджер устройств</a></li>
+        <li><a asp-action="Reservations" asp-controller="Admin">Менеджер бронирований</a></li>
+        <li class="anchor-right"><a asp-action="Logout" asp-controller="Account">Выйти</a></li>
+    </ul>
+    <h1 class="table-header">Менеджер устройств</h1>
+    <div class="popup-form" id="addDeviceForm">
+        <form class="form-container" asp-action="Devices" asp-controller="Admin" method="post">
+            <h2>Новое устройство</h2>
+            <label asp-for="DeviceName">Название устройства</label>
+            <input type="text" asp-for="DeviceName" placeholder="Введите название устройства" />
+            <span class="validation-message" asp-validation-for="DeviceName"></span>
+            <button type="submit" class="confirm-btn">Добавить</button>
+            <button type="button" class="cancel-btn" onclick="closeForm('addDeviceForm')">Закрыть</button>
+        </form>
+    </div>
+    <main>
+        <form asp-action="Devices" asp-controller="Admin" method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Номер устройства</th>
+                        <th>Название устройства</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var device in Model.Devices)
+                    {
+                        <tr>
+                            <td>@device.Id</td>
+                            <td>@device.Name</td>
+                            <td><button class="btn-danger" type="submit" name="deviceId" value="@device.Id">Удалить</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </form>
+    </main>
+    <button class="open-button" onclick="openForm('addDeviceForm')">Добавить устройство</button>
+</body>

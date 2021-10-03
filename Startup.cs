@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using HotDesk.Models.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using HotDesk.Models;
+using HotDesk.Models.Repositories;
+using Microsoft.Extensions.Hosting;
 
 namespace HotDesk
 {
@@ -25,7 +22,8 @@ namespace HotDesk
 
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = "Server=DESKTOP-TEG5PUS;Database=HotDesk;user id=sa;password=s453153s";
+            string connection = "Server=DESKTOP-TEG5PUS;Database=HotDesktop;user id=sa;password=s453153s";
+            //string connection = "Server=localhost;Database=HotDesk;user id=sa;password=s453153s";
             services.AddDbContext<Context>(options => options.UseSqlServer(connection));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -33,14 +31,24 @@ namespace HotDesk
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                     options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
                 });
+            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            
-            app.UseDeveloperExceptionPage();
-   
+
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

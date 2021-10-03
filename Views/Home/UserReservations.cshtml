@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Reservation>
+@{
+    ViewData["Title"] = "My Reservations";
+}
+
+<body class="user-page">
+    <div class="status">
+        Вы авторизованы под логином @User.Identity.Name
+    </div>
+    <ul class="navigation">
+        <li class="active-tab"><a asp-action="Index" asp-controller="Home">Свободные места</a></li>
+        <li class="anchor-right"><a asp-action="Logout" asp-controller="Account">Выйти</a></li>
+        <li class="anchor-right"><a asp-action="UserReservations" asp-controller="Home">Мои забронированные места</a></li>
+    </ul>
+    <h1 class="table-header">Мои забронированные места</h1>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>Номер бронирования</th>
+                    <th>Дата Бронирования</th>
+                    <th>Забронированное место</th>
+                    <th>Забронированные устройства</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reservation in Model)
+                {
+                <tr>
+                    <td>@reservation.Id</td>
+                    <td>@reservation.Date.ToShortDateString()</td>
+                    <td>@reservation.WorkplaceId</td>
+                    <td>
+                        @reservation.Devices
+                       @* @foreach (var device in reservation.Devices)
+                        {
+                            @device.Name <br />
+                        }*@
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </main>
+</body>

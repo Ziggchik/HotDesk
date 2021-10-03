@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Device>
+@{
+    ViewData["Title"] = "Choose Devices";
+}
+
+<body class="user-page">
+    <div class="status">
+        Вы авторизованы под логином @User.Identity.Name
+    </div>
+    <ul class="navigation">
+        <li class="active-tab"><a asp-action="Index" asp-controller="Home">Свободные места</a></li>
+        <li class="anchor-right"><a asp-action="Logout" asp-controller="Account">Выйти</a></li>
+        <li class="anchor-right"><a asp-action="UserReservations" asp-controller="Home">Мои забронированные места</a></li>
+    </ul>
+    <h1 class="table-header">Подтверждение бронирования</h1>
+    <div class="devices-form-body">
+        <form asp-action="ReservationConfirmation" asp-controller="Home" method="post" class="devices-form">
+            <h4>Номер рабочего места: @TempData["workplaceId"]</h4>
+            <h4>Дата бронирования: @Convert.ToDateTime(TempData["date"]).ToShortDateString()</h4>
+            <h3>Выбор устройств</h3>
+            @foreach (var device in Model)
+            {
+                <div class="device-form-group">
+                    <label>@device.Name</label>
+                    <input type="checkbox" name="deviceIds" value="@device.Id" />
+                </div>
+            }
+            <button type="submit">Подтвердить</button>
+        </form>
+    </div>
+</body>

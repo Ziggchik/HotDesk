@@ -1,8 +1,62 @@
-﻿@{
+﻿@model HotDesk.ViewModels.AvailableWorkplacesViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body class="user-page">
+    <div class="status">
+        Вы авторизованы под логином @User.Identity.Name
+    </div>
+    <ul class="navigation">
+        <li class="active-tab"><a asp-action="Index" asp-controller="Home">Свободные места</a></li>
+        <li class="anchor-right"><a asp-action="Logout" asp-controller="Account">Выйти</a></li>
+        <li class="anchor-right"><a asp-action="UserReservations" asp-controller="Home">Мои забронированные места</a></li>
+    </ul>
+    <h1 class="table-header">Свободные места</h1>
+    <form asp-controller="Home" asp-action="Index" method="post">
+        <input type="date" name="preferredDate" id="booking-date" value="@Model?.DateString" />
+        <button type="submit">Поиск мест</button>
+    </form>
+    <script>
+        setMinDateToToday();
+    </script>
+    @if (Model != null)
+    {
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Номер рабочего места</th>
+                        <th>Описание рабочего места</th>
+                        <th>Наличие ПК</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var workplace in Model.Workplaces)
+                    {
+                        <tr>
+                            <td>@workplace.Id</td>
+                            <td>@workplace.Description</td>
+                            <td>
+                                @if (workplace.HasDesktop)
+                                {
+                                    <span>На этом рабочем месте есть ПК.</span>
+                                }
+                                else
+                                {
+                                    <span>На этом рабочем месте нет ПК.</span>
+                                }
+                            </td>
+                            <td>
+                                <form asp-action="MakeReservation" asp-controller="Home" method="post">
+                                    <button class="btn-info" type="submit" name="workplaceId" value="@workplace.Id">Забронировать место</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </main>
+    }
+</body>

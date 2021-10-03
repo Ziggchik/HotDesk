@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HotDesk.Models
+namespace HotDesk.ViewModels
 {
-    public class RegisterModel
+    public class RegisterViewModel
     {
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }

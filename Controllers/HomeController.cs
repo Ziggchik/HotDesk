@@ -1,40 +1,77 @@
-﻿using HotDesk.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using HotDesk.Models;
+using HotDesk.Models.Services;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using HotDesk.ViewModels;
 
 namespace HotDesk.Controllers
 {
+    [Authorize(Roles = "user")]
     public class HomeController : Controller
     {
-        [Authorize(Roles = "admin, user")]
+        private readonly IEmployeeService _employeeService;
+        private readonly IAdminService _adminService;
+        private string CurrentUserEmail { get => User.Identity.Name; }
+
+        public HomeController(IEmployeeService employeeService) => _employeeService = employeeService;
+
+        [HttpGet]
         public IActionResult Index()
         {
-            string role = User.FindFirst(x => x.Type == ClaimsIdentity.DefaultRoleClaimType).Value;
-            return Content($"ваша роль: {role}");
+            return View();
         }
-        [Authorize(Roles = "admin")]
-        public IActionResult About()
+
+        [HttpPost]
+        public IActionResult Index(DateTime preferredDate)
         {
-            return Content("Вход только для администратора");
+            TempData["date"] = preferredDate;
+
+            var viewModel = new AvailableWorkplacesViewModel
+            {
+                DateString = preferredDate.ToString("yyyy-MM-dd"),
+                Workplaces = _employeeService.GetAvailableWorkplaces(preferredDate)
+            };
+
+            return View(viewModel);
         }
-        //private readonly ILogger<HomeController> _logger;
 
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
+        [HttpPost]
+        public IActionResult MakeReservation(int workplaceId)
+        {
+            TempData["workplaceId"] = workplaceId;
+            TempData.Keep();
 
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
+            var model = _employeeService.GetAllDevices();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult ReservationConfirmation(params int[] deviceIds)
+        {
+            var newReservation = new Reservation()
+            {
+                Date = (DateTime)TempData["date"],
+                WorkplaceId = (int)TempData["workplaceId"],
+                UserId = _employeeService.GetCurrentUserId(CurrentUserEmail),
+                Devices = _employeeService.BookDevices(deviceIds)
+            };
+
+            _employeeService.MakeReservation(newReservation);
+            TempData.Clear();
+
+            return View(newReservation);
+        }
+
+        [HttpGet]
+        public IActionResult UserReservations()
+        {
+            var model = _employeeService.GetCurrentUserReservations(CurrentUserEmail);
+
+            return View(model);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

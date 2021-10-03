@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using HotDesk.Models;
 
 namespace HotDesk.Models
 {
@@ -6,6 +7,11 @@ namespace HotDesk.Models
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Workplace> Workplaces { get; set; }
+        public DbSet<Device> Devices { get; set; }
+
+
         public Context(DbContextOptions<Context> options)
             : base(options)
         {
@@ -13,6 +19,10 @@ namespace HotDesk.Models
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Role>().HasIndex(r => r.Name).IsUnique();
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Device>().HasIndex(d => d.Name).IsUnique();
+
             string adminRoleName = "admin";
             string userRoleName = "user";
 
