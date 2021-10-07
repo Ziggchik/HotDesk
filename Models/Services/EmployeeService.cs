@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotDesk.Models.Services
 {
@@ -49,7 +50,7 @@ namespace HotDesk.Models.Services
 
         public IEnumerable<Reservation> GetCurrentUserReservations(string userEmail)
         {
-            return _repository.GetAll<Reservation>().Where(r => r.User.Email == userEmail);
+            return _repository.GetAll<Reservation>().Where(r => r.User.Email == userEmail).Include(x => x.User).Include(d => d.Devices);
         }
     }
 }

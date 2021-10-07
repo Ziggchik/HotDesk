@@ -3,6 +3,8 @@ using HotDesk.Models.Services;
 using HotDesk.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace HotDesk.Controllers
@@ -96,7 +98,7 @@ namespace HotDesk.Controllers
         [HttpGet]
         public IActionResult Reservations()
         {
-            var model = _adminService.GetAll<Reservation>();
+            var model = _adminService.GetAll<Reservation>().Include(x => x.User).Include(d => d.Devices).ToList();
             return View(model);
         }
 
@@ -109,7 +111,7 @@ namespace HotDesk.Controllers
                 reservationToModify.Devices = _adminService.UpdateDevices(deviceIds);
             }
 
-            var model = _adminService.GetAll<Reservation>();
+            var model = _adminService.GetAll<Reservation>().Include(x => x.User).Include(d => d.Devices).ToList();
             return View(model);
         }
 

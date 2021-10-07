@@ -15,7 +15,7 @@
     <h1 class="table-header">Свободные места</h1>
     <form asp-controller="Home" asp-action="Index" method="post">
         <input type="date" name="preferredDate" id="booking-date" value="@Model?.DateString" />
-        <button type="submit">Поиск мест</button>
+        <button class="btn" type="submit">Поиск мест</button>
     </form>
     <script>
         setMinDateToToday();

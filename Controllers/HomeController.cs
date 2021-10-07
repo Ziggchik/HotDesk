@@ -12,7 +12,7 @@ namespace HotDesk.Controllers
     public class HomeController : Controller
     {
         private readonly IEmployeeService _employeeService;
-        private readonly IAdminService _adminService;
+        //private readonly IAdminService _adminService;
         private string CurrentUserEmail { get => User.Identity.Name; }
 
         public HomeController(IEmployeeService employeeService) => _employeeService = employeeService;
@@ -69,7 +69,6 @@ namespace HotDesk.Controllers
         public IActionResult UserReservations()
         {
             var model = _employeeService.GetCurrentUserReservations(CurrentUserEmail);
-
             return View(model);
         }
 

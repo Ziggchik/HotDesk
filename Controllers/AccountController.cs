@@ -45,7 +45,7 @@ namespace HotDesk.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                    ModelState.AddModelError("", "Такой логин/пароль уже существует.Введите новый логин/пароль");
             }
             return View(model);
         }

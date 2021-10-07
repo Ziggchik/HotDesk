@@ -28,8 +28,8 @@
                 <tr>
                     <td>Забронированные устройства</td>
                     <td>
-                        @Model.Reservation.Devices
-                        @* @foreach (var device in Model.Reservation.Devices)
+                    @Model.Reservation.Devices
+                    @*@foreach (var device in Model.Reservation.Devices)
                     {
                         @device.Name <br />
                     }*@
@@ -52,7 +52,7 @@
                     </div>
                 }
                 <input type="text" name="reservationId" value="@Model.Reservation.Id" hidden />
-                <button type="submit">Обновить информацию</button>
+                <button class="btn" type="submit">Обновить информацию</button>
             </form>          
         </div>
     </div>

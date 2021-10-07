@@ -1,6 +1,7 @@
 ﻿using System;
 using HotDesk.Models.Repositories;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace HotDesk.Models.Services
 {
@@ -15,9 +16,9 @@ namespace HotDesk.Models.Services
             return _repository.Get(predicate);
         }
 
-        public IEnumerable<T> GetAll<T>() where T : class
+        public IQueryable <T> GetAll<T>() where T : class
         {
-            return _repository.GetAll<T>();
+            return _repository.GetAll<T>().AsQueryable();
         }
 
         public void Add<T>(T item) where T : class

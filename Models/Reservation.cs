@@ -14,7 +14,6 @@ namespace HotDesk.Models
 
         public int UserId { get; set; }
         public virtual User User { get; set; }
-
-        public virtual IEnumerable<Device> Devices { get; set; }
+        public  IEnumerable<Device> Devices { get; set; }
     }
 }

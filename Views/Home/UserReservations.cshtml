@@ -31,11 +31,10 @@
                     <td>@reservation.Date.ToShortDateString()</td>
                     <td>@reservation.WorkplaceId</td>
                     <td>
-                        @reservation.Devices
-                       @* @foreach (var device in reservation.Devices)
+                        @foreach (var device in reservation.Devices)
                         {
                             @device.Name <br />
-                        }*@
+                        }
                     </td>
                 </tr>
                 }

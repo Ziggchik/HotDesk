@@ -24,7 +24,7 @@ namespace HotDesk
         {
             string connection = "Server=DESKTOP-TEG5PUS;Database=HotDesktop;user id=sa;password=s453153s";
             //string connection = "Server=localhost;Database=HotDesk;user id=sa;password=s453153s";
-            services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+            services.AddDbContext<Context>(options => options/*.UseLazyLoadingProxies()*/.UseSqlServer(connection));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {

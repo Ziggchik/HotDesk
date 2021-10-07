@@ -35,15 +35,14 @@
                         <td>@reservation.WorkplaceId</td>
                         <td>@reservation.UserId</td>
                         <td>
-                            @reservation.Devices
-                            @*@foreach (var device in reservation.Devices)
+                            @foreach (var device in reservation.Devices)
                             {
                                 @device.Name <br />
-                            }*@
+                            }
                         </td>                     
                         <td>
                             <form asp-action="EditReservation" asp-controller="Admin">
-                                <button class="btn-info" type="submit" name="reservationId" value="@reservation.Id">Изменить информацию по устройствам</button>
+                                <button class="btn-info" type="submit" name="reservationId" value="@reservation.Id">Изменить информацию о бронировании</button>
                             </form>
                         </td>
                     </tr>
